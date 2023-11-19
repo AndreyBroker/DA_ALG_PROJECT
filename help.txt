@@ -1,0 +1,20 @@
+** No windows **
+
+Inicializar ambiente virtual: venv/Scripts/activate
+Desativar ambiente virtual: deactivate
+
+
+Requisitos Trabalho:
+
+
+Apresentar um relatório com o número de linhas do documento original, e os nomes das colunas, que descrevem os dados; FEITO
+
+Criar um arquivo parcial, com nome informado pelo usuário, que armazenará os dados correspondentes a uma filtragem de dados. 
+Para este arquivo, também deverá ser possível chamar a função de relatório anterior (retornar para o menu principal).
+
+Criar arquivo de Resumo - Deverá apresentar dados agrupados, com , com totalizadores.
+
+Apresentar dados estatísticos sobre o arquivo, pode ser gerado  , moda, desvio padrão, entre outros. FEITO
+
+
+Realizar uma busca de dados no(s) arquivo(s). FEITO
