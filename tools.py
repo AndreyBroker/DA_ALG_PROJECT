@@ -26,7 +26,7 @@ def default_interface(text='', menu=False, page_title="TITLE"):
     menu_label = "SAIR [0]" 
     general_label = "Voltar [ENTER]"
     nav_label = menu_label if menu else general_label
-    nav_sep_style = 32*"-"
+    nav_sep_style = 48*"-"
     
     calc_seps = len(nav_sep_style) - ( len(page_title) + len(nav_label) )
     seps = calc_seps if calc_seps > 0 else 4

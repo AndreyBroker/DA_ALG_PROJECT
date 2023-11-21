@@ -42,3 +42,12 @@ Informe o mês desejado:
 [12] Dezembro
 
 """
+
+parcial_file_how_use_label = """
+Etapas:\n
+1 - Você irá informar a coluna que deseja realizar a operação\n
+2 - Você irá informar o tipo da operação sendo elas: '==', '>', '<', '!='\n
+3 - Seguida você irá informar o valor para comparação.\n
+4 - E por fim, você irá informar o nome do arquivo e ele será gerado!\n\n
+OBS: As operações só podem ser realizas nas colunas apresentadas no momento da escolha. (Apenas numéricas).
+"""

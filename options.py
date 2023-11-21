@@ -1,9 +1,9 @@
 from tools import print_center, default_interface, plot_two, list_choices_interface
 from dataset import Dataset
-from labels import menu_reports, menu, getTempbyDateLabel, getTempbyDateErrorLabel, statisticDataLabel, general_description_label, parcial_file_label
+from labels import *
 
-dataset = Dataset()
-dataset.clean_dataframe()
+dataset = Dataset() ## Abrindo dataset
+dataset.clean_dataframe() ## Realiza os tratamentos do df
 
 def general_report():
     while True:
@@ -22,10 +22,10 @@ def statistic_data():
         df = dataset.df
         response = default_interface(
             text = statisticDataLabel({
-                "Mediana": str(df.median(numeric_only=True)),
-                "Desvio Padrão": str(df.std(numeric_only=True)),
-                "Média": str(df.mean(numeric_only=True)),
-                "Moda": str(df.mode(numeric_only=True).transpose())
+                "Mediana": df.median(numeric_only=True).to_string(),
+                "Desvio Padrão": df.std(numeric_only=True).to_string(),
+                "Média": df.mean(numeric_only=True).to_string(),
+                "Moda": df.mode(numeric_only=True).loc[0].transpose().to_string()
             }),
             page_title = "Dados Estátisticos"
         )
@@ -50,7 +50,7 @@ def getTempByDate():
                     temp = dataset.getTempByDate(response)
                     
                     if not temp.empty:
-                        default_interface(str(temp))
+                        default_interface(temp.to_string(index=False))
                     else:
                         default_interface("Nenhum dado encontrado.")
                 else:
@@ -92,7 +92,7 @@ def general_description():
             case "":
                 break
             case "1":
-                default_interface(df, page_title= "Descrição Geral")
+                default_interface(df.to_string(index=False), page_title= "Descrição Geral")
             case "2":
                 try:
                     df.to_csv("Resumo.csv")
@@ -102,21 +102,22 @@ def general_description():
             case _:
                 continue
 
-def nf_response(comand):
-    while True:
-        response = default_interface(f"Comando '{comand}' não mapeado", page_title="Erro")
-        
-        match response:
-            case "":
-                break
-            case _:
-                continue
-
 def parcial_file():
     df = dataset.df
     while True:
         
-        columns = df.select_dtypes(include=['number']).columns.drop(['Unnamed: 19'])
+        response = default_interface("[1] Criar Arquivo Parcial\n[2] Como usar?")
+        
+        match response:
+            case "":
+                break
+            case "1":
+                pass
+            case "2":
+                default_interface(parcial_file_how_use_label)
+                continue
+        
+        columns = df.select_dtypes(include=['number']).columns
         col = list_choices_interface(list_choices=columns, page_title="Relatório Parcial")
         
         match col:
@@ -133,7 +134,7 @@ def parcial_file():
                         break
                     case a if op:
                         
-                        value = default_interface("O valor informado só pode ser numérico.\n"+col+f"\n {op} ", page_title="Relatório Parcial")
+                        value = default_interface("O valor informado só pode ser numérico.\n\n"+col+f"\n {op} ", page_title="Relatório Parcial")
                         
                         if value == "":
                             break
@@ -168,6 +169,16 @@ def parcial_file():
             case _:
                 default_interface(f"Resposta {col} é inválida, tente novamente.", page_title="Resposta inválida")
 
+def nf_response(comand):
+    while True:
+        response = default_interface(f"Resposta '{comand}' é inválido.", page_title="Resposta Inválida.")
+        
+        match response:
+            case "":
+                break
+            case _:
+                continue
+
 def reports():
     
     while True:
@@ -190,8 +201,7 @@ def reports():
                 parcial_file()
             case _:
                 nf_response(response)
-                
-            
+                         
 def inicial():
     
     while True:
