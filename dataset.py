@@ -41,15 +41,22 @@ class Dataset:
     def clean_dataframe(self):
         
         try:
-            self.df = self.df.replace(',', '.', regex=True)
+            substituicoes = {
+                ',': '.',
+                '-9999': None,
+                '-': '/'
+            }
+            
+            self.df = self.df.replace(substituicoes, regex=True)
             self.df["TEMP_AR"] = self.df["TEMP_AR"].astype(float)
-            self.df["DATA"] = pd.to_datetime(self.df['DATA'].str.replace("-", "/"), format='%Y/%m/%d') 
-                    
+            self.df["DATA"] = pd.to_datetime(self.df['DATA'], format='%Y/%m/%d') 
+            self.df["DIA"] = self.df["DATA"].dt.day
             fuso_horario_local = timezone(timedelta(hours=-3))  # Exemplo: GMT-3
             self.df['HORA'] = self.df['HORA'].apply(lambda x: self.converter_utc_para_local(x, fuso_horario_local) if 'UTC' in x else x)
             return True
         except Exception as ex:
             print(f"Erro ao realizar as tratativas no dataframe.\n{ex}")
+            input()
             return False
             
     def general_report(self):
@@ -57,11 +64,18 @@ class Dataset:
         colunas = ", ".join(self.columuns())
         return f"Total de linhas: {len(self.df)}\nColunas: [{colunas}]"
     
-    def getTempByDate(self, date):
+    def isValidDate(self, date):
         
+        try:
+            datetime_obj = datetime.strptime(date, '%Y/%m/%d')
+            return date
+        except ValueError:
+            return False
+    
+    def getTempByDate(self, date):
         df_f = self.df[self.df["DATA"] == date][["TEMP_AR", "HORA"]].sort_values(by='HORA')
         
-        print(df_f)
+        return df_f
     
         
         
